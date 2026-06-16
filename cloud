@@ -1,0 +1,30 @@
+#!/bin/bash
+flare() {
+  ssh -o ProxyCommand="cloudflared access ssh --hostname %h" "$1@$2"
+}
+if ! type cloudflared >/dev/null 2>&1; then
+  echo "cloudflared not installed!"
+  echo "Wait cloudflared Downloading..."
+  echo ""
+  #sudo apt update && sudo apt install cloudflared
+  if pkg install cloudflared >/dev/null 2>&1 || sudo apt install cloudflared >/dev/null 2>&1; then
+    sleep 1
+    echo "cloudflared successfully installed!"
+    echo "-----------------------------------"
+    echo ""
+    echo ""
+  fi
+fi
+echo "====== cloud flared shell tunnel ======"
+echo ""
+echo "[1] press to make cloudflared tunnel."
+echo "[2] press to connect remote ssh."
+read -p "Enter Choice: " Choice
+if [[ $Choice -eq 1 ]]; then
+  cloudflared tunnel --url ssh://localhost:22
+else
+  read -p "Enter User name: " name
+  read -p "Enter or paste cloudflared url: " url
+  flare $name $url
+
+fi
