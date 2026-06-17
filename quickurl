@@ -1,0 +1,9 @@
+#!/bin/bash
+echo "==== Genrate cockpit url ===="
+gen(){
+  #  cloudflared tunnel --url
+cloudflared tunnel --url  "http://$(hostname -I | awk '{print $1}'):$1"
+  }
+read -p "Enter the port no before create url: " port
+gen $port
+
