@@ -1,0 +1,44 @@
+#!/bin/bash
+LOCATION=$HOME/.ssh/
+create_ssh(){ #optional
+  ssh-keygen -t $(whoami)
+}
+
+configssh(){
+  mkdir -p "$HOME/.ssh"
+  touch "$HOME/.ssh/config"
+  read -p "Enter your remote shell name: " $1
+  read -p "Enter hostname aka ip or url: " $2
+  read -p "Enter username: " $3 
+ 
+}
+
+# error handling
+set -eou pipefail
+
+if ! type ssh >/dev/null 2>&1 || ! type sshd >/dev/null 2>&1; then
+  echo "ssh not installed"
+  echo "wait ssh installing..."
+  pkg update -y >/dev/null 2>&1 || sudo apt update -y >/dev/null 2>&1; then
+  if sudo apt install openssh-server -y >/dev/null 2>&1 || pkg install openssh; then
+    echo "ssh successfully installed!."
+  else
+    echo "ssh installtion failed"
+    echo "Try to install manually using command sudo apt install openssh-server"
+    echo "for termux use: pkg install openssh"
+    exit 1
+  fi
+fi
+
+
+## Menu
+echo "|------ MENU ------|
+echo "[1]:- Press to generate key "
+echo "[2]:- Press to make the config file"
+echo "[3]:- Press to 
+read -p "Enter the choice: " CHOICE
+if [[ $CHOICE == "1" ]]; then
+  create_ssh 
+elif [[ $CHOICE == "2" ]]; then
+  read -p "Enter hostname: shell name: " 
+  configssh 
