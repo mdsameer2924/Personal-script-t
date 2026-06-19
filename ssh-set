@@ -1,16 +1,16 @@
 #!/bin/bash
-LOCATION=$HOME/.ssh/
-create_ssh(){ #optional
-  ssh-keygen -t $(whoami)
+LOCATION=$HOME/.ssh
+create_ssh() { #optional
+  ssh-keygen -C $(whoami)
 }
 
-configssh(){
-  mkdir -p "$HOME/.ssh"
-  touch "$HOME/.ssh/config"
-  read -p "Enter your remote shell name: " $1
-  read -p "Enter hostname aka ip or url: " $2
-  read -p "Enter username: " $3 
- 
+configssh() {
+  mkdir -p "$LOCATION/.ssh"
+  touch "$LOCATION/config"
+  echo "Host $1
+   Hostname $2
+   User $3
+  " >>"$LOCATIONconfig"
 }
 
 # error handling
@@ -19,7 +19,7 @@ set -eou pipefail
 if ! type ssh >/dev/null 2>&1 || ! type sshd >/dev/null 2>&1; then
   echo "ssh not installed"
   echo "wait ssh installing..."
-  pkg update -y >/dev/null 2>&1 || sudo apt update -y >/dev/null 2>&1; then
+  pkg update -y >/dev/null 2>&1 || sudo apt update -y >/dev/null 2>&1
   if sudo apt install openssh-server -y >/dev/null 2>&1 || pkg install openssh; then
     echo "ssh successfully installed!."
   else
@@ -30,15 +30,19 @@ if ! type ssh >/dev/null 2>&1 || ! type sshd >/dev/null 2>&1; then
   fi
 fi
 
-
 ## Menu
-echo "|------ MENU ------|
+echo "|------ MENU ------|"
 echo "[1]:- Press to generate key "
 echo "[2]:- Press to make the config file"
-echo "[3]:- Press to 
+echo "[3]:- Press to exit"
 read -p "Enter the choice: " CHOICE
 if [[ $CHOICE == "1" ]]; then
-  create_ssh 
+  create_ssh
 elif [[ $CHOICE == "2" ]]; then
-  read -p "Enter hostname: shell name: " 
-  configssh 
+  read -p "Enter host: shell name: " host
+  read -p "Enter hostname ip or host url: " hostname
+  read -p "Enter the username of shell: " username
+  configssh "$host" "$hostname" "$username"
+else
+  echo "invalid choice"
+fi
