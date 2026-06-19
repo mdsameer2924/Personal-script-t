@@ -1,5 +1,5 @@
 #!/bin/bash
-LOCATION=$HOME/.ssh
+LOCATION="$HOME/.ssh"
 create_ssh() { #optional
   ssh-keygen -C $(whoami)
 }
@@ -7,14 +7,10 @@ create_ssh() { #optional
 configssh() {
   mkdir -p "$LOCATION/.ssh"
   touch "$LOCATION/config"
-  echo "Host $1
+  echo """Host $1
    Hostname $2
-   User $3
-  " >>"$LOCATIONconfig"
+   User $3""" >>"$LOCATION/config"
 }
-
-# error handling
-set -eou pipefail
 
 if ! type ssh >/dev/null 2>&1 || ! type sshd >/dev/null 2>&1; then
   echo "ssh not installed"
