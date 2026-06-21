@@ -1,0 +1,37 @@
+#!/bin/bash
+
+## Error handling - try catch
+shopt -s nocasematch
+L1="$HOME/storage/.bedtime.csv"
+L2="$HOME/storage/.waketime.csv"
+TIMESTAMP=$(date +%I:%M%p)
+DATE=$(date +%Y-%m-%d)
+DAY=$(date | awk '{print $1}')
+
+while true; do
+  read -p "Sleep or Wake: " bedtime
+  #sone ke liye bad par jaane ka time
+  if [[ $bedtime == "sleep" ]]; then
+    if [[ ! -f $L1 ]]; then
+      echo "Date, Time, Day" > "$L1"
+    else
+      echo "$DATE, $TIMESTAMP, $DAY" >> "$L1"
+    fi
+
+    break
+
+  elif [[ $bedtime == "wake" ]]; then
+    if [[ ! -f $L2 ]]; then
+      echo "Date, Time, Day" > "$L2"
+    else 
+      echo "$DATE, $TIMESTAMP, $DAY" >> "$L2"
+    fi
+    break
+  else
+    echo "invalid choice"
+    echo "try again!"
+    echo ""
+  fi
+done
+
+shopt -u nocasematch
