@@ -1,16 +1,30 @@
 #!/bin/bash
+SSH_installer() {
+  pkg install openssh >/dev/null 2>&1 || sudo apt install openssh-server >/dev/null 2>&1
+  if ! type ssh >/dev/null; then
+    echo "ssh successfully installed!"
 
+  fi
+}
 flare() {
   ssh -o ProxyCommand="cloudflared access ssh --hostname %h" "$1@$2"
 }
-if ! type cloudflared >/dev/null 2>&1; then
-  echo "cloudflared not installed!"
-  echo "Wait cloudflared Downloading..."
+gen() {
+  read -p "Enter protocols like (http,https, ssh): " protocol
+  read -p "Enter the port no before create url: " port
+
+  cloudflared tunnel --url "$protocol://$(hostname -I | awk '{print $1}'):$port"
+}
+
+if ! type cloudflared >/dev/null 2>&1 && ! type ssh >/dev/null 2>&1; then
+  echo "dependency not installed!"
+  echo "Wait dependency Downloading..."
   echo ""
   #sudo apt update && sudo apt install cloudflared
   if pkg update >/dev/null 2>&1 || sudo apt update >/dev/null 2>&1; then
     sudo apt install cloudflared >/dev/null || pkg install cloudflared >/dev/null
     echo "cloudflared successfully installed!"
+    SSH_installer
     echo "-----------------------------------"
     echo ""
     echo ""
@@ -22,7 +36,8 @@ echo "[1] press to make cloudflared tunnel."
 echo "[2] press to connect remote ssh."
 read -p "Enter Choice: " Choice
 if [[ $Choice -eq 1 ]]; then
-  cloudflared tunnel --url ssh://localhost:22
+  gen $protocol $port
+
 else
   read -p "Enter User name: " name
   read -p "Enter or paste cloudflared url: " url
