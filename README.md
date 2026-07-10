@@ -15,5 +15,4 @@ go to that directory then
 ```bash
 ./cloud
 ```
-again replace `cloud` with `script` you will use 
-
+again replace `cloud` with `script` you will use.
