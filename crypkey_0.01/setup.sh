@@ -90,7 +90,7 @@ if ! which gocryptfs >/dev/null 2>&1; then
   fi
 fi
 
-if ! cat ~/.bashrc | grep -i 'export PATH="$HOME/bin:$PATH"'; then
+if ! cat ~/.bashrc | grep -i 'export PATH="$HOME/bin:$PATH"' >/dev/null; then
   log_info "wait user bin path setting up"
   setup_bin_path
 else
