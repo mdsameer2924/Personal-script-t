@@ -105,7 +105,7 @@ else
   log_info "already installed go no setup required"
 fi
 if ! which tle >/dev/null 2>&1; then
-  while True; do
+  while true; do
     if go install github.com/drand/tlock/cmd/tle@latest; then
       log_ok "Tle encrption tool isntalled"
       break
