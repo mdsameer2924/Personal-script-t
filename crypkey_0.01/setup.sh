@@ -75,7 +75,7 @@ fi
 
 if ! which python3 >/dev/null 2>&1; then
   prepare "python is not installed" "python is installing wait..."
-  sudo apt install python3 -y >/dev/null 2>&1 || pkg install python3 -y /dev/null 2>&1 || sudo dnf install python3 -y >/dev/null 2>&1
+  sudo apt install python3 -y >/dev/null 2>&1 || pkg install python3 -y >/dev/null 2>&1 || sudo dnf install python3 -y >/dev/null 2>&1
   log_ok "python installation complete"
 else
   log_info "python found installed"
@@ -111,6 +111,7 @@ if ! which tle >/dev/null 2>&1; then
       break
     else
       sudo apt install build-essential -y || sudo dnf groupinstall "Development Tools" -y
+      go install github.com/drand/tlock/cmd/tle@latest
       break
     fi
   done
