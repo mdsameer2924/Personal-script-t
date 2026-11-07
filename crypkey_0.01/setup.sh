@@ -92,6 +92,7 @@ fi
 
 if ! cat ~/.bashrc | grep -i 'export PATH="$HOME/bin:$PATH"'; then
   log_info "wait user bin path setting up"
- setup_bin_path
+  setup_bin_path
 else
   log_info "no need to setup use bin path it's already setup"
+fi
