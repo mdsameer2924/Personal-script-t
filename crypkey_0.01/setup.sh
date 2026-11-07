@@ -27,7 +27,7 @@ log_info() {
 }
 
 log_warn() {
-  echo "${Yellow}[WARN]${Reset} $1"
+  echo -e "${Yellow}[WARN]${Reset} $1"
 }
 prepare() {
   log_warn "$1"
