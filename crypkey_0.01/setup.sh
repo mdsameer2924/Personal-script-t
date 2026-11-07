@@ -105,8 +105,16 @@ else
   log_info "already installed go no setup required"
 fi
 if ! which tle >/dev/null 2>&1; then
-  go install github.com/drand/tlock/cmd/tle@latest
-  log_ok "Tle encrption tool isntalled"
+  while True; do
+    if go install github.com/drand/tlock/cmd/tle@latest; then
+      log_ok "Tle encrption tool isntalled"
+      break
+    else
+      sudo apt install build-essential -y || sudo dnf groupinstall "Development Tools" -y
+      break
+    fi
+  done
+
 else
   log_info "skip already installed"
 fi
