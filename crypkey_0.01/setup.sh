@@ -96,3 +96,17 @@ if ! cat ~/.bashrc | grep -i 'export PATH="$HOME/bin:$PATH"' >/dev/null; then
 else
   log_info "no need to setup use bin path it's already setup"
 fi
+
+if ! which go >/dev/null 2>&1; then
+  prepare "go is not installed" "wait for it's installation"
+  sudo apt install golang -y >/dev/null 2>&1 || pkg install golang -y >/dev/null 2>&1 || sudo dnf install golang -y >/dev/null 2>&1
+  log_ok "installation completed!"
+else
+  log_info "already installed go no setup required"
+fi
+if ! which tle >/dev/null 2>&1; then
+  go install github.com/drand/tlock/cmd/tle@latest
+  log_ok "Tle encrption tool isntalled"
+else
+  log_info "skip already installed"
+fi
