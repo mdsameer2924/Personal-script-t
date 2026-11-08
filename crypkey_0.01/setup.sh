@@ -119,3 +119,6 @@ if ! which tle >/dev/null 2>&1; then
 else
   log_info "skip already installed"
 fi
+
+mv ~/go/bin/tle ~/bin
+source ~/.bashrc
