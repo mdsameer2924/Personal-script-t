@@ -45,6 +45,15 @@ setup_bin_path() {
   source ~/.bashrc
   log_ok "User bin path successfully setup!."
 }
+isPath(){
+  if [[ -d "$1"]]; then
+  echo "$1"
+else
+  exit 1
+fi
+}
+
+
 log_info "Checking Internet Connection..."
 sleep 0.5
 echo "....."
@@ -119,6 +128,10 @@ if ! which tle >/dev/null 2>&1; then
 else
   log_info "skip already installed"
 fi
-
-mv ~/go/bin/tle ~/bin
-exec bash
+if isPath "~/bin"; then
+  mv ~/go/bin/tle ~/bin
+else
+  mkdir -p ~/bin
+  mv ~/go/bin/tle ~/bin
+fi
+  exec bash
