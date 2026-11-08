@@ -127,7 +127,7 @@ if ! which tle >/dev/null 2>&1; then
 else
   log_info "skip already installed"
 fi
-if isPath "~/bin"; then
+if isPath ~/bin; then
   mv ~/go/bin/tle ~/bin
 else
   mkdir -p ~/bin
