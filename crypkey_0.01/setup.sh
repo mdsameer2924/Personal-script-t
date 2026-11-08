@@ -130,6 +130,7 @@ fi
 if isPath ~/bin; then
   mv ~/go/bin/tle ~/bin
 else
+  log_warn "path not found"
   mkdir -p ~/bin
   mv ~/go/bin/tle ~/bin
 fi
