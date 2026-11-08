@@ -121,4 +121,4 @@ else
 fi
 
 mv ~/go/bin/tle ~/bin
-source ~/.bashrc
+exec bash
