@@ -4,23 +4,21 @@ set -euo pipefail
 # --- Embedded Module: package_script.sh ---
 if command -v apt-get >/dev/null 2>&1; then
   PKG_MANAGER="apt"
-  INSTALL_CMD="sudo apt update && sudo apt install -y"
 elif command -v dnf >/dev/null 2>&1; then
   PKG_MANAGER="dnf"
-  INSTALL_CMD="sudo dnf install -y"
 elif command -v pacman >/dev/null 2>&1; then
   PKG_MANAGER="pacman"
-  INSTALL_CMD="sudo pacman -S --noconfirm"
 elif command -v pkg >/dev/null 2>&1; then
   PKG_MANAGER="termux"
-  INSTALL_CMD="pkg install -y"
 else
   echo "Error: No supported package manager found (apt, dnf, pacman, pkg)." >&2
   exit 1
 fi
 Ins() {
-  local package="$1"
-  sudo "$PKG_MANAGER" install "$package" -y || "$PKG_MANAGER" install "$package" -y
+  local tool=$@
+  for i in $tool; do
+    sudo "$PKG_MANAGER" install $i -y || "$PKG_MANAGER" install $i -y
+  done
 }
 
 updte() {
@@ -28,7 +26,7 @@ updte() {
 }
 
 try_manual() {
-  local tool=$1
+  local tool="$1"
   echo "try to install manually look  below command just paste into terminal!"
   echo "sudo $PKG_MANAGER install $tool" || echo "$PKG_MANAGER install $tool"
 }
@@ -58,25 +56,29 @@ log_err() {
   echo -e "${RED}[FAIL]${RESET} $1"
 }
 
-check_tool_installation() {
-  local tool="$1"
-  if ! which "$tool" >/dev/null 2>&1; then
-    log_info "$tool is Not installed. wait it's installing..."
-    if Ins "$tool" >/dev/null 2>&1; then
-      log_ok "$tool successfully installed"
+tool_installation() {
+  local tools="$@"
+  for tool in $tools; do
+    if ! which $tool >/dev/null 2>&1; then
+      log_info "$tool is Not installed. wait it's installing..."
+      if Ins $tool >/dev/null 2>&1; then
+        log_ok "$tool successfully installed"
+      else
+        log_err "failed to install"
+        try_manual $tool
+      fi
     else
-      log_err "failed to install"
-      try_manual "$tool"
+      log_info "found ${tool}: installation skip!"
     fi
-  else
-    log_info "found ${tool}: installation skip!"
-  fi
+  done
 }
+tool_installation "git" "fzf" "nodejs" "npm"
+## let's install neovim before fetch latest file
 
-update_system() {
-  log_info "wait system is updating..."
-  sudo apt update -y >/dev/null 2>&1 || pkg update -y >/dev/null 2>&1 || sudo dnf update -y >/dev/null 2>&1
-  log_ok "sucessfully udpate now resume further process..."
-}
-
-check_tool_installation "cmatrix"
+if [[ $PKG_MANAGER != "pkg" ]]; then
+  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+  sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+  sudo mv /opt/nvim-linux-x86_64/bin/nvim /usr/bin
+else
+  tool_installation "neovim"
+fi
