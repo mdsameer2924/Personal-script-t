@@ -79,8 +79,9 @@ if [[ $PKG_MANAGER != "pkg" ]]; then
   if ! which nvim >/dev/null 2>&1; then
     log_info "Neovim is installing in GNU/Linux.."
     curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    sudo rm -rf /opt/nvim-linux-x86_64
     sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-    sudo mv /opt/nvim-linux-x86_64/bin/nvim /usr/bin
+    sudo ln -sf /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim
     log_ok "neovim installed in system.."
   else
     log_info "found neovim: installation skip!"
@@ -96,5 +97,4 @@ wget https://github.com/mdsameer2924/Personal-script-t/raw/refs/heads/main/neovi
 tar -xvzf nvim_setup.tar.gz
 mv nvim ~/.config/nvim
 log_ok "successfully all setup done"
-
-nvim
+rm nvim_setup.tar.gz
