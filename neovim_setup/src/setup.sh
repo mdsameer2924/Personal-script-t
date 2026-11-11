@@ -76,9 +76,18 @@ tool_installation "git" "fzf" "nodejs" "npm"
 ## let's install neovim before fetch latest file
 
 if [[ $PKG_MANAGER != "pkg" ]]; then
-  curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
-  sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
-  sudo mv /opt/nvim-linux-x86_64/bin/nvim /usr/bin
+  if ! which nvim >/dev/null 2>&1; then
+    log_info "Neovim is installing in GNU/Linux.."
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim-linux-x86_64.tar.gz
+    sudo tar -C /opt -xzf nvim-linux-x86_64.tar.gz
+    sudo mv /opt/nvim-linux-x86_64/bin/nvim /usr/bin
+    log_ok "neovim installed in system.."
+  else
+    log_info "found neovim: installation skip!"
+  fi
 else
+  log_info "neovim is installtion..."
   tool_installation "neovim"
 fi
+
+##
