@@ -90,4 +90,11 @@ else
   tool_installation "neovim"
 fi
 
-##
+## let's setup nvim now
+log_info "wait nvim configuration..."
+wget https://github.com/mdsameer2924/Personal-script-t/raw/refs/heads/main/neovim_setup/dist/nvim_setup.tar.gz
+tar -xvzf nvim_setup.tar.gz
+mv nvim ~/.config/
+log_ok "successfully all setup done"
+
+nvim
