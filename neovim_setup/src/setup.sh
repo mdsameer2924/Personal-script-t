@@ -1,5 +1,15 @@
 #!/bin/bash
 set -euo pipefail
+log_info "Internet connection checking wait..."
+echo "....:"
+sleep 1
+echo "....:"
+if ping -c 1 -W 1 www.google.com >/dev/null 2>&1; then
+  log_ok "internet connection found..."
+  echo "now continue"
+else
+  exit 1
+fi
 
 # --- Embedded Module: package_script.sh ---
 if command -v apt-get >/dev/null 2>&1; then
@@ -72,7 +82,7 @@ tool_installation() {
     fi
   done
 }
-tool_installation "git" "fzf" "nodejs" "npm"
+tool_installation "git" "wget" "curl" "fzf" "nodejs" "npm"
 ## let's install neovim before fetch latest file
 
 if [[ $PKG_MANAGER != "pkg" ]]; then
