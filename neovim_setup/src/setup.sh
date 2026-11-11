@@ -93,7 +93,7 @@ tar -xvzf nvim_setup.tar.gz
 mv nvim ~/.config/nvim
 log_ok "successfully all setup done"
 rm nvim_setup.tar.gz
-
+clear
 echo "\n"
 log_info "let me download nvim document"
 wget https://raw.githubusercontent.com/mdsameer2924/Python/refs/heads/main/python/08-pythonoops/polymorphism/practice/README.md
