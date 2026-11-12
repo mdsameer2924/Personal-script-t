@@ -22,7 +22,9 @@ Ins() {
 }
 
 updte() {
-  sudo "$PKG_MANAGER" update || "$PKG_MANAGER" update
+  log_info "System is Updating wait!"
+  sudo "$PKG_MANAGER" update -y >/dev/null 2>&1 || "$PKG_MANAGER" update -y >/dev/null 2>&1
+  log_ok "System repo updated"
 }
 
 try_manual() {
@@ -55,16 +57,6 @@ log_err() {
   local RED="\033[91m"
   echo -e "${RED}[FAIL]${RESET} $1"
 }
-log_info "Internet connection checking wait..."
-echo "....:"
-sleep 1
-echo "....:"
-if ping -c 1 -W 1 www.google.com >/dev/null 2>&1; then
-  log_ok "internet connection found..."
-  echo "now continue"
-else
-  exit 1
-fi
 
 tool_installation() {
   local tools="$@"
@@ -82,6 +74,18 @@ tool_installation() {
     fi
   done
 }
+log_info "Internet connection checking wait..."
+echo "....:"
+sleep 1
+echo "....:"
+if ping -c 1 -W 1 www.google.com >/dev/null 2>&1; then
+  log_ok "internet connection found..."
+  echo "now continue"
+else
+  exit 1
+fi
+
+updte
 tool_installation "git" "wget" "curl" "fzf" "nodejs" "npm" "neovim"
 ## let's install neovim before fetch latest file
 ## <code tha yaha par >
