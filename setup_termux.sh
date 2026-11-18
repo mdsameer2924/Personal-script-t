@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
-
+echo "setup: username@localhost view"
+echo "remember it's won't change your original username and hostname just replace text"
 read -p "enter replacement for username: " name
 read -p "enter replacement for localhost: " locs
 
